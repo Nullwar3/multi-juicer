@@ -11,6 +11,11 @@ RUN GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build
 RUN chmod +x progress-watchdog
 
 FROM gcr.io/distroless/static:nonroot
+
+RUN addgroup --system <group>
+RUN adduser --system <user> --ingroup <group>
+USER <user>:<group>
+
 COPY --from=builder --chown=nonroot:nonroot /src/progress-watchdog /progress-watchdog
 ENV GIN_MODE=release
 CMD ["/progress-watchdog"]
